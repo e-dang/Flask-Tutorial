@@ -17,6 +17,9 @@
         "emmet.includeLanguages": {
             "jinja-html": "html"
         },
+        "files.associations": {
+            "*.html": "jinja-html"
+        },
         "terminal.integrated.shell.linux": "/bin/zsh",
         "python.pythonPath": "/usr/local/bin/python",
         "python.linting.enabled": true,
