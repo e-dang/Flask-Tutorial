@@ -22,7 +22,7 @@ posts = [
 
 @app.route('/')
 @app.route('/home')
-def hello():
+def home():
     return render_template('home.html', posts=posts)
 
 
