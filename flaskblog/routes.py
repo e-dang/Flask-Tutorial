@@ -11,6 +11,10 @@ from PIL import Image
 @app.route('/')
 @app.route('/home')
 def home():
+    """
+    The Home page route that displays all posts ordered by the most recently posted.
+    """
+
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     return render_template('home.html', posts=posts)
@@ -18,11 +22,21 @@ def home():
 
 @app.route('/about')
 def about():
+    """
+    The About page route that displays nothing but 'About Page'
+    """
+
     return render_template('about.html', title='About')
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    The Register page route that allows new users to register an account. When a user successfully registers, they are
+    redirected to the login page. If the user is already logged in they are redirected to the Home page. Uses the
+    RegistrationForm.
+    """
+
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = RegistrationForm()
@@ -38,6 +52,12 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    The Login page route that allows users to log in, if they already have an account. If they are already logged in then
+    this page redirects to the Home page. If they successfully log in, then it redirects to which ever page is requested
+    next, or is no page is requested next, then redirect to the Home page. Uses the LoginForm.
+    """
+
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = LoginForm()
@@ -54,11 +74,23 @@ def login():
 
 @app.route('/logout', methods=['GET'])
 def logout():
+    """
+    The Logout page route that simply logs out the user and redirects to the homepage.
+    """
+
     logout_user()
     return redirect(url_for('home'))
 
 
 def save_picture(form_picture):
+    """
+    Takes a picture form and renames it to a random hex code of length 8, and resizes the picture to 125 X 125 pixels
+    before saving it to the profile_pictures directory.
+
+    Returns:
+        The picture filepath.
+    """
+
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
@@ -75,6 +107,11 @@ def save_picture(form_picture):
 @app.route('/account', methods=['POST', 'GET'])
 @login_required
 def account():
+    """
+    The Account page route that displays the user's information and allows them to update it. Uses the
+    UpdateAccountForm.
+    """
+
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -95,6 +132,11 @@ def account():
 @app.route('/post/new', methods=['POST', 'GET'])
 @login_required
 def new_post():
+    """
+    The Create_Post page route that allows a user to create a new post to the blog. When a post has been successfully
+    created, this page redirects to the Home page. Uses the PostForm.
+    """
+
     form = PostForm()
     if form.validate_on_submit():
         post = Post(title=form.title.data, content=form.content.data, author=current_user)
@@ -107,6 +149,12 @@ def new_post():
 
 @app.route('/post/<int:post_id>')
 def post(post_id):
+    """
+    The Post page route that allows someone to view a single post. If that person is the author of the post they will
+    have the option to update or delete the post. In either case this page will redirect to the update_post or
+    delete_post routes.
+    """
+
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', title=post.title, post=post)
 
@@ -114,6 +162,12 @@ def post(post_id):
 @app.route('/post/<int:post_id>/update', methods=['POST', 'GET'])
 @login_required
 def update_post(post_id):
+    """
+    The route used to update a post. It displays the create_post.html page with the original posts contents filled in,
+    and allows the user to change anything about the post. When the post has been successfully updated it redirects to
+    the post route.
+    """
+
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
         abort(403)
@@ -133,6 +187,11 @@ def update_post(post_id):
 @app.route('/post/<int:post_id>/delete', methods=['POST'])
 @login_required
 def delete_post(post_id):
+    """
+    The route used to delete post. If the user is not the author of the post then it aborts with a 403 error. Otherwise
+    the post is deleted and the user is redirected to the home route.
+    """
+
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
         abort(403)
@@ -144,6 +203,10 @@ def delete_post(post_id):
 
 @app.route('/user/<string:username>', methods=['POST', 'GET'])
 def user_posts(username):
+    """
+    The route that leads to the user_posts.html page. This route allows users to view all posts made by a given user.
+    """
+
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)

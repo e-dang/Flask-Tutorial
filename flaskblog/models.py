@@ -5,10 +5,19 @@ from flask_login import UserMixin
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Gets the user associated with a user_id
+    """
+
     return User.query.get(int(user_id))
 
 
 class User(db.Model, UserMixin):
+    """
+    The User model that specifies the types of information stored for each user. Contains a backref of 'author' to the
+    Posts to table.
+    """
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -21,6 +30,11 @@ class User(db.Model, UserMixin):
 
 
 class Post(db.Model):
+    """
+    The Post model that specifies the types of information stored for each post. Each post is tied to a user through a
+    author backref.
+    """
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)

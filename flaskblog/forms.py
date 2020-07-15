@@ -7,6 +7,10 @@ from flaskblog.models import User
 
 
 class RegistrationForm(FlaskForm):
+    """
+    The form used for registering a new user. Displayed in register.html.
+    """
+
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -25,6 +29,10 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
+    """
+    The form used to login an already existing user. Displayed in login.html.
+    """
+
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
@@ -32,6 +40,10 @@ class LoginForm(FlaskForm):
 
 
 class UpdateAccountForm(FlaskForm):
+    """
+    The form used to update an existing user's account information. Displayed in account.html.
+    """
+
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
@@ -51,6 +63,10 @@ class UpdateAccountForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
+    """
+    The form used to create a new post. Displayed in create_post.html.
+    """
+
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Post')
