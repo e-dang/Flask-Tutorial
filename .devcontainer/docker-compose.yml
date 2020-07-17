@@ -1,0 +1,30 @@
+version: "3.4"
+services:
+  app:
+    container_name: flaskblog
+    restart: always
+    build:
+      context: ..
+      target: dev
+    ports:
+      - 5000:5000
+    environment:
+      DATABASE_URL: "postgresql://dev_user:dev_password@postgres:5432/dev_flaskblog"
+    command: sleep infinity
+    links:
+      - postgres
+    volumes:
+      - ..:/workspace:cached
+    env_file: ../.env
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=dev_password
+      - POSTGRES_DB=dev_flaskblog
+    volumes:
+      - ../postgres_db:/var/lib/postgresql/data/
