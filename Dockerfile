@@ -66,3 +66,4 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && pip3 install --user -r requirements.txt
+CMD ["python", "run.py"]
