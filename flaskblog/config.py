@@ -12,6 +12,7 @@ class DevConfig:
 
 
 class HerokuConfig(DevConfig):
+    SECRET_KEY = os.environ.get('SECURE_KEY')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
