@@ -15,7 +15,6 @@ services:
       - postgres
     volumes:
       - ..:/workspace:cached
-    env_file: ../.env
   postgres:
     container_name: postgres
     image: postgres
