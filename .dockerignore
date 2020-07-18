@@ -1,3 +1,6 @@
+.devcontainer
+.git
+.gitignore
 .env
 postgres_db
 **/__pycache__
