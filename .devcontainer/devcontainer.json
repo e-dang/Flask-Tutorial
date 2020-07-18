@@ -2,15 +2,9 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.122.1/containers/python-3
 {
     "name": "Python 3",
-    "build": {
-        "dockerfile": "Dockerfile",
-        "context": "..",
-        // Update 'VARIANT' to pick a Python version. Rebuild the container
-        // if it already exists to update. Available variants: 3, 3.6, 3.7, 3.8
-        "args": {
-            "VARIANT": "3.8"
-        }
-    },
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
     // Set *default* container specific settings.json values on container create.
     "settings": {
         "editor.quickSuggestionsDelay": 5,
@@ -43,9 +37,9 @@
         "ms-python.python"
     ],
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
-    "forwardPorts": [
-        5000
-    ],
+    // "forwardPorts": [
+    //     5000
+    // ],
     // Use 'postCreateCommand' to run commands after the container is created.
     "postCreateCommand": "pip3 install --user -r requirements.txt && apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get -y install --no-install-recommends vim"
     // Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
