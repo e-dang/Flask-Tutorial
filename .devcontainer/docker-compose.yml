@@ -9,7 +9,7 @@ services:
     ports:
       - 5000:5000
     environment:
-      DATABASE_URL: "postgresql://dev_user:dev_password@postgres:5432/dev_flaskblog"
+        SQLALCHEMY_DATABASE_URI: "postgresql://dev_user:dev_password@postgres:5432/dev_flaskblog"
     command: sleep infinity
     links:
       - postgres
