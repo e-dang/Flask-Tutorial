@@ -1,8 +1,10 @@
 # Mutli-stage build base layer
 FROM python:3.8.3 AS base
+ENV FLASK_APP=flaskblog
 
 # Development build layer. Taken from https://github.com/microsoft/vscode-dev-containers/blob/v0.122.1/containers/python-3/.devcontainer/base.Dockerfile
 FROM base AS dev
+ENV FLASK_ENV=development
 
 # This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
 # property in devcontainer.json to use it. On Linux, the container user's GID/UIDs
@@ -55,15 +57,20 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+# Set user to non-root user with sudo access and add their bin dir to path
+USER $USERNAME
+ENV PATH=/home/${USERNAME}/.local/bin:${PATH}
+
 # Production build layer
-FROM base AS production
+FROM base AS production_heroku
 WORKDIR /usr/src/app
 COPY . .
-EXPOSE 5000
+ENV FLASK_ENV=production
+ENV PATH=/home/${USERNAME}/.local/bin:${PATH}
 RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
-    && pip3 install --user -r requirements.txt
-CMD ["python", "run.py"]
+    && pip3 install -r requirements.txt
+CMD flask run --host 0.0.0.0 --port $PORT
