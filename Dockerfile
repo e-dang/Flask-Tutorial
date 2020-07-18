@@ -66,6 +66,7 @@ FROM base AS production_heroku
 WORKDIR /usr/src/app
 COPY . .
 ENV FLASK_ENV=production
+ENV MY_FLASK_APP_CONFIG=heroku
 ENV PATH=/home/${USERNAME}/.local/bin:${PATH}
 RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
