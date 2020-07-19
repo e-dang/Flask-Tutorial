@@ -74,4 +74,4 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && pip3 install -r requirements.txt
-CMD flask run --host 0.0.0.0 --port $PORT
+CMD gunicorn -w 2 -b 0.0.0.0:$PORT run:app
