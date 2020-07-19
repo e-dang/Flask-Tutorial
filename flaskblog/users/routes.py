@@ -100,6 +100,11 @@ def user_posts(username):
 
 @users.route('/reset_password', methods=['POST', 'GET'])
 def reset_request():
+    """
+    The route that leads to the reset_request.html page. This route has the user enter the email of their account, which is
+    then sent an email with a link to reset the password.
+    """
+
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = RequestResetForm()
@@ -113,6 +118,11 @@ def reset_request():
 
 @users.route('/reset_password/<token>', methods=['POST', 'GET'])
 def reset_token(token):
+    """
+    The route that leads to the reset_token.html page. This route leads to the page that allows the user to reset their
+    password.
+    """
+
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     user = User.verify_reset_token(token)
