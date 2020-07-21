@@ -14,9 +14,10 @@ login_manager.login_message_category = 'info'
 mail = Mail()
 
 
-def create_app(config_class=os.environ.get('MY_FLASK_APP_CONFIG', 'dev')):
+def create_app(config_class=os.environ.get('MY_FLASK_APP_CONFIG', 'dev'), **kwargs):
     app = Flask(__name__)
     app.config.from_object(configs[config_class])
+    app.config.from_mapping(kwargs)
 
     db.init_app(app)
     bcrypt.init_app(app)
@@ -36,4 +37,4 @@ def create_app(config_class=os.environ.get('MY_FLASK_APP_CONFIG', 'dev')):
     with app.app_context():
         db.create_all()
 
-        return app
+    return app
