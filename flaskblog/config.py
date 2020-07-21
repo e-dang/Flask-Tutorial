@@ -18,7 +18,7 @@ class DevConfig:
 class TestConfig:
     TESTING = True
     SECRET_KEY = 'testing'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
+    SQLALCHEMY_DATABASE_URI = None  # should be defined in session scoped test setup
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
