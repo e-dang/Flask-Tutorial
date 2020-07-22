@@ -2,9 +2,12 @@ import pytest
 from flask import request
 
 
-@pytest.mark.parametrize('client', [None], indirect=['client'])
-@pytest.mark.parametrize('url', ['/', '/home'])
-def test_home(client, url, loaded_db):
+@pytest.mark.parametrize('client, loaded_db, url', [
+    (None, None, '/'),
+    (None, None, '/home'),
+],
+    indirect=['client', 'loaded_db'])
+def test_home(client, loaded_db, url):
     resp = client.get(url)
 
     assert resp.status_code == 200
