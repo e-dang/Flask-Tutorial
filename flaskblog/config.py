@@ -20,6 +20,8 @@ class TestConfig:
     SECRET_KEY = 'testing'
     SQLALCHEMY_DATABASE_URI = None  # should be defined in session scoped test setup
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    LOGIN_DISABLED = True
+    WTF_CSRF_ENABLED = False
 
 
 class HerokuConfig(DevConfig):
