@@ -138,6 +138,11 @@ def user_0post(users):
 
 
 @pytest.fixture(scope='function')
+def post(posts):
+    return posts['post0']
+
+
+@pytest.fixture(scope='function')
 def loaded_db(tmp_db, users, posts):
     for user in users.values():
         tmp_db.session.add(user)
