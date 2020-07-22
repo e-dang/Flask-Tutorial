@@ -91,22 +91,6 @@ def session(db):
 
 
 @pytest.fixture(scope='function')
-def tmp_db(db):
-    """
-    Fixture for when the database tables need to be filled, dropped, and reset and session fixture doesn't work.
-    """
-    connection = db.engine.connect()
-    _session = db.create_scoped_session(options={'bind': connection, 'binds': {}})
-    db.session = _session
-
-    yield db
-
-    connection.close()
-    db.drop_all()
-    db.create_all()
-
-
-@pytest.fixture(scope='function')
 def users():
     return deepcopy(__USERS)
 
@@ -143,13 +127,13 @@ def post(posts):
 
 
 @pytest.fixture(scope='function')
-def loaded_db(tmp_db, users, posts):
+def loaded_db(session, users, posts):
     for user in users.values():
-        tmp_db.session.add(user)
+        session.add(user)
 
     for post in posts.values():
-        tmp_db.session.add(post)
+        session.add(post)
 
-    tmp_db.session.commit()
+    session.commit()
 
-    yield tmp_db
+    yield session
