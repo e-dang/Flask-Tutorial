@@ -3,7 +3,7 @@ import mock
 from flaskblog.users import forms
 
 
-def test_registration_form(req, user_0post):
+def test_registration_form(req, user_0post, session):
     form = forms.RegistrationForm(obj=user_0post, confirm_password=user_0post.password)
 
     form.submit()
