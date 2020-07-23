@@ -11,4 +11,4 @@ script:
   - docker exec -it flaskblog bash -c "cd tests && pytest -v"
 
 after_success:
-  - ./.travis/deploy_dockerhub.sh
+  - ./.travis/upload_dockerhub.sh
