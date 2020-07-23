@@ -10,5 +10,8 @@ script:
   - docker ps -a
   - docker exec -it flaskblog bash -c "cd tests && pytest -v"
 
-after_success:
-  - ./.travis/upload_dockerhub.sh
+deploy:
+  - provider: script
+    script: bash ./.travis/upload_dockerhub.sh
+    on:
+      all_branches: true
