@@ -86,7 +86,7 @@ def account():
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 
-@users.route('/user/<string:username>', methods=['POST', 'GET'])
+@users.route('/user/<string:username>', methods=['GET'])
 def user_posts(username):
     """
     The route that leads to the user_posts.html page. This route allows users to view all posts made by a given user.
