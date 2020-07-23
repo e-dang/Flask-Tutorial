@@ -92,5 +92,5 @@ def test_create_post_duplicate(session):
 
 
 def test_load_user(loaded_db, users):
-    for i, user in enumerate(users.values(), start=1):
-        assert user == models.load_user(i)
+    for user in users.values():
+        assert user == models.load_user(user.id)
