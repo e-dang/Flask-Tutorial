@@ -1,6 +1,8 @@
 sudo: required
+os: linux
 language: python
+python: "3.8.3"
 install:
   - pip install -r requirements.txt
 script:
-  - python -m pytest -v
+  - pytest -v
