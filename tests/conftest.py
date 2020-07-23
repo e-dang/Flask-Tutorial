@@ -27,9 +27,12 @@ __USERS = load_users()
 
 # Modified from http://alexmic.net/flask-sqlalchemy-pytest/
 @pytest.fixture(scope='session')
-def app(tmp_path_factory):
-    SQLALCHEMY_DATABASE_URI = f'sqlite:///{tmp_path_factory.mktemp("flaskblog") / "tmpdb.db"}'
-    _app = create_app('test', SQLALCHEMY_DATABASE_URI=SQLALCHEMY_DATABASE_URI)
+def app():
+    test_config = os.environ.get('MY_FLASK_APP_CONFIG', 'sqlite_test')
+    if 'test' not in test_config:
+        pytest.exit(f'Must supply a testing configuration! Supplied config - {test_config}', 1)
+
+    _app = create_app(test_config)
 
     context = _app.app_context()
     context.push()
