@@ -1,8 +1,7 @@
 import pytest
 import json
 import os
-from flaskblog import create_app, db as _db
-from flaskblog import models
+from flaskblog import create_app, db as _db, models, bcrypt
 from copy import deepcopy
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
@@ -127,8 +126,10 @@ def post(posts):
 
 
 @pytest.fixture(scope='function')
-def loaded_db(session, users, posts):
+def loaded_db(session, users, posts, request):
     for user in users.values():
+        if request.__dict__.get('param'):
+            user.password = bcrypt.generate_password_hash(user.password).decode('utf-8')
         session.add(user)
 
     for post in posts.values():
