@@ -63,8 +63,8 @@ USER $USERNAME
 ENV PATH=/home/${USERNAME}/.local/bin:${PATH}
 
 
-# Base test build layer
-FROM base AS test_base
+# Test build layer
+FROM base AS postgres_test
 WORKDIR /usr/src/app
 COPY . .
 ENV FLASK_ENV=production
