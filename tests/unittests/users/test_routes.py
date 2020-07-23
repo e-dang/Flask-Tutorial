@@ -118,16 +118,16 @@ def test_account_get(mock_account_form, mock_current_user, mock_url_for, client)
     assert request.endpoint == 'users.account'
 
 
-@pytest.mark.parametrize('client, data', [
-    (None, {'username': 'TestUser',
-            'email': 'test_user@demo.com',
-            'picture': 'test_image.png'}),
-    (None, {'username': 'TestUser',
-            'email': 'test_user@demo.com'})
+@pytest.mark.parametrize('client, session, data', [
+    (None, None, {'username': 'TestUser',
+                  'email': 'test_user@demo.com',
+                  'picture': 'test_image.png'}),
+    (None, None, {'username': 'TestUser',
+                  'email': 'test_user@demo.com'})
 ],
-    indirect=['client'],
+    indirect=['client', 'session'],
     ids=['w_pic_data', 'no_pic_data'])
-def test_account_post(client, data):
+def test_account_post(client, session, data):
     hashed_image_file = 'hashed_image_file.png'
     default_image_file = 'default_image.png'
     with mock.patch('flaskblog.users.routes.save_picture') as mock_save_picture, \
