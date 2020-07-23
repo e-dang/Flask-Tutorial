@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker login --username $DOCKER_USER --password $DOCKER_PASS
+echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 
 if [[ "${TRAVIS_BRANCH}" = "master" ]]; then
     TAG="latest"
@@ -10,6 +10,5 @@ else
     TAG="latest-feature"
 fi
 
-docker build -f Dockerfile -t $TRAVIS_REPO_SLUG:$TAG --target production .
-docker tag $TRAVIS_REPO_SLUG $DOCKER_REPO
-docker push $DOCKER_REPO
+docker build -f Dockerfile -t $DOCKER_REPO:$TAG --target production .
+docker push "$DOCKER_USER"/"$DOCKER_REPO"
