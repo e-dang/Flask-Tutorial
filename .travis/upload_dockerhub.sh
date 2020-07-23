@@ -11,4 +11,4 @@ else
 fi
 
 docker build -f Dockerfile -t $DOCKER_REPO:$TAG --target production_heroku .
-docker push "$DOCKER_USER"/"$DOCKER_REPO"
+docker push $DOCKER_REPO:$TAG
