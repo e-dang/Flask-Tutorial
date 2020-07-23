@@ -6,6 +6,6 @@ language: python
 python: "3.8.3"
 
 script:
-  - docker-compose -f .travis/docker-compose.yml up -d
+  - docker-compose -f .travis/docker-compose.yml -p flaskblog up -d
   - docker ps -a
   - docker exec -it flaskblog bash -c "cd tests && pytest -v"
