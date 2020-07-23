@@ -12,6 +12,7 @@ services:
       SQLALCHEMY_DATABASE_URI: "postgresql://dev_user:dev_password@postgres:5432/test_flaskblog"
     links:
       - postgres
+    tty: true
   postgres:
     container_name: postgres
     image: postgres
