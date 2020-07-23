@@ -1,8 +1,11 @@
 sudo: required
 os: linux
+services:
+  - docker
 language: python
 python: "3.8.3"
-install:
-  - pip install -r requirements.txt
+
 script:
-  - pytest -v
+  - docker-compose -f .travis/docker-compose.yml up -d
+  - docker ps -a
+  - docker exec -it flaskblog bash -c "cd tests && pytest -v"
