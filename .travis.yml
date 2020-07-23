@@ -9,3 +9,6 @@ script:
   - docker-compose -f .travis/docker-compose.yml -p flaskblog up -d
   - docker ps -a
   - docker exec -it flaskblog bash -c "cd tests && pytest -v"
+
+after_success:
+  - ./.travis/deploy_dockerhub.sh
