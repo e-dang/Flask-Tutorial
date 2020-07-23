@@ -47,7 +47,7 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
-            flash('Login Unseccessful. Please check email and password', 'danger')
+            flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 
@@ -86,7 +86,7 @@ def account():
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 
-@users.route('/user/<string:username>', methods=['POST', 'GET'])
+@users.route('/user/<string:username>', methods=['GET'])
 def user_posts(username):
     """
     The route that leads to the user_posts.html page. This route allows users to view all posts made by a given user.

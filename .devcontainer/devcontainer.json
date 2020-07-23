@@ -2,9 +2,15 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.122.1/containers/python-3
 {
     "name": "Python 3",
-    "dockerComposeFile": "docker-compose.yml",
+    "dockerComposeFile": [
+        "docker-compose.yml",
+        "docker-compose.extend.yml"
+    ],
     "service": "app",
     "workspaceFolder": "/workspace",
+    "remoteEnv": {
+        "PYTHONPATH": "/workspace:${containerEnv:PYTHONPATH}",
+    },
     // Set *default* container specific settings.json values on container create.
     "settings": {
         "editor.quickSuggestionsDelay": 5,
@@ -18,6 +24,7 @@
         "python.pythonPath": "/usr/local/bin/python",
         "python.linting.enabled": true,
         "python.linting.pylintEnabled": true,
+        "python.linting.lintOnSave": true,
         "python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
         "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
         "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
@@ -29,7 +36,7 @@
         "python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
         "python.linting.pylintArgs": [
             "--load-plugins",
-            "pylint-flask"
+            "pylint_flask"
         ]
     },
     // Add the IDs of extensions you want installed when the container is created.
