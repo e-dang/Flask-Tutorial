@@ -46,6 +46,7 @@ RUN apt-get update \
     && /tmp/pip-tmp/bin/pipx install --pip-args=--no-cache-dir pipx \
     && echo "${DEFAULT_UTILS}" | xargs -n 1 /tmp/pip-tmp/bin/pipx install --system-site-packages --pip-args=--no-cache-dir --pip-args=--force-reinstall \
     && chown -R ${USER_UID}:${USER_GID} ${PIPX_HOME} \
+    && /tmp/pip-tmp/bin/pipx inject pylint pylint-flask \
     && rm -rf /tmp/pip-tmp \
     #
     # Tactically remove imagemagick due to https://security-tracker.debian.org/tracker/CVE-2019-10131
@@ -60,6 +61,21 @@ RUN apt-get update \
 # Set user to non-root user with sudo access and add their bin dir to path
 USER $USERNAME
 ENV PATH=/home/${USERNAME}/.local/bin:${PATH}
+
+
+# Test build layer
+FROM base AS postgres_test
+WORKDIR /usr/src/app
+COPY . .
+ENV FLASK_ENV=production
+ENV MY_FLASK_APP_CONFIG=postgres_test
+ENV PATH=/home/${USERNAME}/.local/bin:${PATH}
+RUN apt-get update \
+    && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip3 install -r requirements.txt
 
 # Production build layer
 FROM base AS production_heroku

@@ -130,3 +130,4 @@ dmypy.json
 
 *.db
 postgres_db
+.devcontainer/docker-compose.extend.yml

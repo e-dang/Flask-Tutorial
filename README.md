@@ -1,4 +1,4 @@
-# Flask-Tutorial
+# Flask-Tutorial ![Travis (.com) branch](https://img.shields.io/travis/com/e-dang/Flask-Tutorial/master?label=master) ![Travis (.com) branch](https://img.shields.io/travis/com/e-dang/Flask-Tutorial/dev?label=dev)
 
 ## Description
 

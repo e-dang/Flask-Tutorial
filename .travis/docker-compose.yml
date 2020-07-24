@@ -5,16 +5,14 @@ services:
     restart: always
     build:
       context: ..
-      target: dev
+      target: postgres_test
     ports:
       - 5000:5000
     environment:
-      SQLALCHEMY_DATABASE_URI: "postgresql://dev_user:dev_password@postgres:5432/dev_flaskblog"
-    command: sleep infinity
+      SQLALCHEMY_DATABASE_URI: "postgresql://dev_user:dev_password@postgres:5432/test_flaskblog"
     links:
       - postgres
-    volumes:
-      - ..:/workspace:cached
+    tty: true
   postgres:
     container_name: postgres
     image: postgres:12.3
@@ -22,6 +20,4 @@ services:
     environment:
       - POSTGRES_USER=dev_user
       - POSTGRES_PASSWORD=dev_password
-      - POSTGRES_DB=dev_flaskblog
-    volumes:
-      - ../postgres_db:/var/lib/postgresql/data/
+      - POSTGRES_DB=test_flaskblog
