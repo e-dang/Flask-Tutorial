@@ -3,14 +3,14 @@
 echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 
 if [[ "${TRAVIS_BRANCH}" = "master" ]]; then
-    TAG="latest"
-    TARGET="production_heroku"
+    export TAG="latest"
+    export TARGET="production_heroku"
 elif [[ "${TRAVIS_BRANCH}" = "dev" ]]; then
-    TAG="latest-dev"
-    TARGET="dev"
+    export TAG="latest-dev"
+    export TARGET="dev"
 else
-    TAG="latest-feature"
-    TARGET="dev"
+    export TAG="latest-feature"
+    export TARGET="dev"
 fi
 
 docker build -f Dockerfile -t $DOCKER_USER/$DOCKER_REPO:$TAG --target $TARGET .
