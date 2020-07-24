@@ -62,13 +62,18 @@
             </div>
             <div class="col-md-4">
             <div class="content-section">
-                <h3>Our Sidebar</h3>
-                <p class='text-muted'>You can put any information here you'd like.
+                {% if  current_user.is_authenticated %}
+                    <h3>Quicklinks - <a href="{{ url_for('users.account') }}">{{ current_user.username }}</a></h3>
+                {% else %}
+                    <h3>Quicklinks</h3>
+                {% endif %}
+                <p class='text-muted'>
                 <ul class="list-group">
-                    <li class="list-group-item list-group-item-light">Latest Posts</li>
-                    <li class="list-group-item list-group-item-light">Announcements</li>
-                    <li class="list-group-item list-group-item-light">Calendars</li>
-                    <li class="list-group-item list-group-item-light">etc</li>
+                    {% if current_user.is_authenticated %}
+                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('users.user_posts', username=current_user.username) }}">My Posts</a></li>
+                    {% endif %}
+                    <li class="list-group-item list-group-item-light"><a href="https://github.com/e-dang/Flask-Tutorial">Github</a></li>
+                    <li class="list-group-item list-group-item-light"><a href="{{ rand_link() }}">Suprise Me!</a></li>
                 </ul>
                 </p>
             </div>
