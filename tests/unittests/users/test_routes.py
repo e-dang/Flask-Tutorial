@@ -55,22 +55,22 @@ def test_login_get(client, authenticated, session):
             assert request.endpoint == 'users.login'
 
 
-@pytest.mark.parametrize('client, loaded_db, user_idx, next_page, endpoint', [
-    (None, True, 0, None, 'main.home'),
-    (None, True, 0, 'account', 'users.account')
+@pytest.mark.parametrize('client, loaded_db, user_2posts, next_page, endpoint', [
+    (None, True, None, None, 'main.home'),
+    (None, True, None, 'account', 'users.account')
 ],
-    indirect=['client', 'loaded_db'],
+    indirect=['client', 'loaded_db', 'user_2posts'],
     ids=['no_specific_next_page', 'specific_next_page'])
-def test_login_post(client, loaded_db, user_idx, next_page, endpoint):
+def test_login_post(client, loaded_db, user_2posts, next_page, endpoint):
     with mock.patch('flaskblog.users.routes.current_user') as mock_current_user, \
             mock.patch('flaskblog.users.routes.login_user') as mock_login_user:
         mock_current_user.configure_mock(is_authenticated=False)
-        resp = client.post('/login', data={'email': f'test_email{user_idx}@demo.com',
-                                           'password': f'test_password{user_idx}'}, query_string={'next': next_page},
+        resp = client.post('/login', data={'email': user_2posts.email,
+                                           'password': f'test_password0'}, query_string={'next': next_page},
                            follow_redirects=True)
 
         mock_login_user.assert_called_once()
-        mock_login_user.assert_called_with(load_user(user_idx + 1), remember=False)
+        mock_login_user.assert_called_with(user_2posts, remember=False)
         assert resp.status_code == 200
         assert request.endpoint == endpoint
 

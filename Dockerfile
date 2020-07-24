@@ -62,6 +62,21 @@ RUN apt-get update \
 USER $USERNAME
 ENV PATH=/home/${USERNAME}/.local/bin:${PATH}
 
+
+# Test build layer
+FROM base AS postgres_test
+WORKDIR /usr/src/app
+COPY . .
+ENV FLASK_ENV=production
+ENV MY_FLASK_APP_CONFIG=postgres_test
+ENV PATH=/home/${USERNAME}/.local/bin:${PATH}
+RUN apt-get update \
+    && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip3 install -r requirements.txt
+
 # Production build layer
 FROM base AS production_heroku
 WORKDIR /usr/src/app

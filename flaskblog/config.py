@@ -15,13 +15,17 @@ class DevConfig:
     MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
 
 
-class TestConfig:
+class SQLiteTestConfig:
     TESTING = True
     SECRET_KEY = 'testing'
-    SQLALCHEMY_DATABASE_URI = None  # should be defined in session scoped test setup
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'  # in memory database
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     LOGIN_DISABLED = True
     WTF_CSRF_ENABLED = False
+
+
+class PostgreSQLTestConfig(SQLiteTestConfig):
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')  # postgres database from docker-compose
 
 
 class HerokuConfig(DevConfig):
@@ -32,6 +36,7 @@ class HerokuConfig(DevConfig):
 
 configs = {
     'dev': DevConfig,
-    'test': TestConfig,
+    'sqlite_test': SQLiteTestConfig,
+    'postgres_test': PostgreSQLTestConfig,
     'heroku': HerokuConfig
 }

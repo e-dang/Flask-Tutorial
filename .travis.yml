@@ -1,0 +1,21 @@
+sudo: required
+os: linux
+services:
+  - docker
+language: python
+python: "3.8.3"
+
+script:
+  - docker-compose -f .travis/docker-compose.yml -p flaskblog up -d
+  - docker ps -a
+  - docker exec -it flaskblog bash -c "cd tests && pytest -v"
+
+deploy:
+  - provider: script
+    script: bash ./.travis/upload_dockerhub.sh
+    on:
+      all_branches: true
+  - provider: script
+    script: bash  ./.travis/deploy_heroku.sh
+    on:
+      branch: master
