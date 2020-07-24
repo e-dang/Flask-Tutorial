@@ -8,6 +8,11 @@ from flask import request
 ],
     indirect=['client', 'loaded_db'])
 def test_home(client, loaded_db, url):
+    """
+    Test that both aliases for the home page lead to the correct endpoint and that posts are ordered from earliest to
+    latest.
+    """
+
     resp = client.get(url)
 
     assert resp.status_code == 200
@@ -19,6 +24,10 @@ def test_home(client, loaded_db, url):
 
 
 def test_about(client):
+    """
+    Test that the about page url leads to the correct endpoint.
+    """
+
     resp = client.get('/about')
 
     assert resp.status_code == 200

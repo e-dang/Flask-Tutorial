@@ -6,6 +6,10 @@ from flaskblog.users import utils
 @mock.patch('flaskblog.users.utils.secrets')
 @mock.patch('flaskblog.users.utils.Image')
 def test_save_picture(mock_image, mock_secrets, app):
+    """
+    Test that the save_picture utility function manipulates the picture name properly.
+    """
+
     random_hex = 'random_hex'
     ext = '.png'
     mock_secrets.token_hex.return_value = random_hex
@@ -24,6 +28,10 @@ def test_save_picture(mock_image, mock_secrets, app):
 @mock.patch('flaskblog.users.utils.Message')
 @mock.patch('flaskblog.users.utils.mail')
 def test_send_reset_email(mock_mail, mock_message, req):
+    """
+    Test that the send_reset_email sends an email with the reset_token inside of it.
+    """
+
     reset_token = 'random_reset_token'
     mock_user = mock.MagicMock()
     mock_user.get_reset_token.return_value = reset_token
