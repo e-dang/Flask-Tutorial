@@ -15,7 +15,7 @@ services:
     tty: true
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:12.3
     restart: unless-stopped
     environment:
       - POSTGRES_USER=dev_user
