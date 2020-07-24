@@ -11,6 +11,10 @@ from flaskblog.models import load_user
     indirect=['client'],
     ids=['is_authenticated', 'is_not_authenticated'])
 def test_register_get(client, authenticated, session):
+    """
+    Test the GET method of the user registration endpoint and the redirects if user is already logged in.
+    """
+
     with mock.patch('flaskblog.users.routes.current_user') as mock_current_user:
         mock_current_user.configure_mock(is_authenticated=authenticated)
         resp = client.get('/register', follow_redirects=True)
@@ -25,6 +29,10 @@ def test_register_get(client, authenticated, session):
 @mock.patch('flaskblog.users.routes.current_user')
 @mock.patch('flaskblog.users.routes.db')
 def test_register_post(mock_db, mock_current_user, client, user_0post, session):
+    """
+    Test the POST method to the user register endpoint.
+    """
+
     mock_current_user.configure_mock(is_authenticated=False)
     resp = client.post('/register', data={'username': user_0post.username,
                                           'email': user_0post.email,
@@ -44,6 +52,10 @@ def test_register_post(mock_db, mock_current_user, client, user_0post, session):
     indirect=['client'],
     ids=['is_authenticated', 'is_not_authenticated'])
 def test_login_get(client, authenticated, session):
+    """
+    Test the GET method of the login endpoint.
+    """
+
     with mock.patch('flaskblog.users.routes.current_user') as mock_current_user:
         mock_current_user.configure_mock(is_authenticated=authenticated)
         resp = client.get('/login', follow_redirects=True)
@@ -62,6 +74,10 @@ def test_login_get(client, authenticated, session):
     indirect=['client', 'loaded_db', 'user_2posts'],
     ids=['no_specific_next_page', 'specific_next_page'])
 def test_login_post(client, loaded_db, user_2posts, next_page, endpoint):
+    """
+    Test the POST method of the login endpoint when valid data is passed.
+    """
+
     with mock.patch('flaskblog.users.routes.current_user') as mock_current_user, \
             mock.patch('flaskblog.users.routes.login_user') as mock_login_user:
         mock_current_user.configure_mock(is_authenticated=False)
@@ -80,6 +96,10 @@ def test_login_post(client, loaded_db, user_2posts, next_page, endpoint):
 ],
     indirect=['client', 'loaded_db'])
 def test_login_post_fail(client, loaded_db):
+    """
+    Test the POST method of the login endpoint when invalid data is passed.
+    """
+
     with mock.patch('flaskblog.users.routes.current_user') as mock_current_user, \
             mock.patch('flaskblog.users.routes.login_user') as mock_login_user, \
             mock.patch('flaskblog.users.routes.flash') as mock_flash:
@@ -95,6 +115,10 @@ def test_login_post_fail(client, loaded_db):
 
 @mock.patch('flaskblog.users.routes.logout_user')
 def test_logout(mock_log_out, client, session):
+    """
+    Test the GET method of the logout endpoint.
+    """
+
     resp = client.get('/logout', follow_redirects=True)
 
     mock_log_out.assert_called_once()
@@ -106,6 +130,10 @@ def test_logout(mock_log_out, client, session):
 @mock.patch('flaskblog.users.routes.current_user')
 @mock.patch('flaskblog.users.routes.UpdateAccountForm')
 def test_account_get(mock_account_form, mock_current_user, mock_url_for, client):
+    """
+    Test the GET method of the account endpoint.
+    """
+
     mock_account_form.return_value = mock_account_form
     mock_account_form.validate_on_submit.return_value = False
     mock_current_user.configure_mock(username='TestUser', email='test_user@demo.com', image_file='test_image.png')
@@ -128,6 +156,10 @@ def test_account_get(mock_account_form, mock_current_user, mock_url_for, client)
     indirect=['client', 'session'],
     ids=['w_pic_data', 'no_pic_data'])
 def test_account_post(client, session, data):
+    """
+    Test the POST method of the account endpoint.
+    """
+
     hashed_image_file = 'hashed_image_file.png'
     default_image_file = 'default_image.png'
     with mock.patch('flaskblog.users.routes.save_picture') as mock_save_picture, \
@@ -149,6 +181,10 @@ def test_account_post(client, session, data):
 
 
 def test_user_posts(client, user_2posts, loaded_db):
+    """
+    Test the GET method of the user posts endpoint.
+    """
+
     resp = client.get(f'/user/{user_2posts.username}', query_string={'page': 1})
 
     assert resp.status_code == 200
@@ -158,6 +194,10 @@ def test_user_posts(client, user_2posts, loaded_db):
 
 
 def test_user_posts_fail(client, user_2posts, loaded_db):
+    """
+    Test the GET method of the user posts endpoint when the user doesn't exist.
+    """
+
     resp = client.get(f'/user/{user_2posts.username}', query_string={'page': 1000})
 
     assert resp.status_code == 404
@@ -170,6 +210,10 @@ def test_user_posts_fail(client, user_2posts, loaded_db):
     indirect=['client', 'session'],
     ids=['is_authenticated', 'not_authenticated'])
 def test_reset_request_get(client, session, authenticated, endpoint):
+    """
+    Test the GET method for requesting a password endpoint.
+    """
+
     with mock.patch('flaskblog.users.routes.current_user') as mock_current_user:
         mock_current_user.configure_mock(is_authenticated=authenticated)
         resp = client.get('/reset_password', follow_redirects=True)
@@ -179,6 +223,10 @@ def test_reset_request_get(client, session, authenticated, endpoint):
 
 
 def test_reset_request_post(client, user_1post, loaded_db):
+    """
+    Test the POST method for requesting a password endpoint.
+    """
+
     with mock.patch('flaskblog.users.routes.current_user') as mock_current_user, \
             mock.patch('flaskblog.users.routes.send_reset_email') as mock_send_reset_email:
         mock_current_user.configure_mock(is_authenticated=False)
@@ -198,6 +246,10 @@ def test_reset_request_post(client, user_1post, loaded_db):
     indirect=['client', 'session', 'user_1post'],
     ids=['is_authenticated', 'not_authenticated_and_verified', 'not_authenticated_and_not_verified'])
 def test_reset_token_get(client, session, user_1post, authenticated, verified, endpoint):
+    """
+    Test the GET method of the password reset endpoint.
+    """
+
     with mock.patch('flaskblog.users.routes.current_user') as mock_current_user, \
             mock.patch('flaskblog.users.routes.User') as mock_user_class:
         mock_user_class.verify_reset_token.return_value = user_1post if verified else None
@@ -209,6 +261,10 @@ def test_reset_token_get(client, session, user_1post, authenticated, verified, e
 
 
 def test_reset_token_post(client, user_1post):
+    """
+    Test the POST method of the password reset endpoint.
+    """
+
     new_password = 'New Password'
     hashed_new_password = b'Hashed new password'
     with mock.patch('flaskblog.users.routes.db') as mock_db, \

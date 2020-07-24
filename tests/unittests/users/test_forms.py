@@ -4,6 +4,10 @@ from flaskblog.users import forms
 
 
 def test_registration_form(req, user_0post, session):
+    """
+    Test the user registration form when valid data is passed.
+    """
+
     form = forms.RegistrationForm(obj=user_0post, confirm_password=user_0post.password)
 
     form.submit()
@@ -26,6 +30,10 @@ def test_registration_form(req, user_0post, session):
     indirect=['req', 'loaded_db'],
     ids=['taken_username', 'missing_username', 'username_too_short', 'username_too_long', 'taken_email', 'missing_email', 'invalid_email', 'mismatch_passwords', 'missing_password', 'missing_confirm_password'])
 def test_registration_form_fail(req, loaded_db, username, email, password, confirm_password, error_attr, expect_num_errors):
+    """
+    Test the user registration form when invalid data is passed.
+    """
+
     form = forms.RegistrationForm(username=username, email=email, password=password, confirm_password=confirm_password)
 
     form.submit()
@@ -36,6 +44,10 @@ def test_registration_form_fail(req, loaded_db, username, email, password, confi
 
 
 def test_login_form(req, user_0post):
+    """
+    Test the login form when valid data is passed.
+    """
+
     form = forms.LoginForm(obj=user_0post)
 
     form.submit()
@@ -44,6 +56,10 @@ def test_login_form(req, user_0post):
 
 
 def test_update_account_form(req, user_0post, loaded_db):
+    """
+    Test the update account form when valid data is passed.
+    """
+
     with mock.patch('flaskblog.users.forms.current_user', user_0post):
         form = forms.UpdateAccountForm(username='New Username', email='new_email@demo.com', picture='pic.png')
 
@@ -59,6 +75,10 @@ def test_update_account_form(req, user_0post, loaded_db):
     indirect=['req', 'user_0post', 'loaded_db'],
     ids=['taken_username', 'taken_email'])
 def test_update_account_form_fail(req, user_0post, loaded_db, username, email, picture, error_attr, expected_num_errors):
+    """
+    Test the update account form when invalid data is passed.
+    """
+
     with mock.patch('flaskblog.users.forms.current_user', user_0post):
         form = forms.UpdateAccountForm(username=username, email=email, picture=picture)
 
@@ -70,6 +90,10 @@ def test_update_account_form_fail(req, user_0post, loaded_db, username, email, p
 
 
 def test_request_reset_form(req, user_0post, loaded_db):
+    """
+    Test the request reset form when valid data is passed.
+    """
+
     form = forms.RequestResetForm(email=user_0post.email)
 
     form.submit()
@@ -78,6 +102,10 @@ def test_request_reset_form(req, user_0post, loaded_db):
 
 
 def test_request_reset_form_fail(req, loaded_db):
+    """
+    Test the request reset form when invalid data is passed.
+    """
+
     form = forms.RequestResetForm(email='no_email@demo.com')
 
     form.submit()
@@ -86,6 +114,10 @@ def test_request_reset_form_fail(req, loaded_db):
 
 
 def test_reset_password_form(req):
+    """
+    Test the reset password form when valid data is passed.
+    """
+
     form = forms.ResetPasswordForm(password='New Password', confirm_password='New Password')
 
     form.submit()
@@ -101,6 +133,10 @@ def test_reset_password_form(req):
     indirect=['req'],
     ids=['mismatch_passwords', 'missing_password', 'missing_confirm_password'])
 def test_reset_password_form_fail(req, password, confirm_password, expected_num_errors, error_attr):
+    """
+    Test the reset password form when invalid data is passed.
+    """
+
     form = forms.ResetPasswordForm(password=password, confirm_password=confirm_password)
 
     form.submit()

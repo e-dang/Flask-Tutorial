@@ -28,6 +28,11 @@ __USERS = load_users()
 # Modified from http://alexmic.net/flask-sqlalchemy-pytest/
 @pytest.fixture(scope='session')
 def app():
+    """
+    Session scoped fixture that sets up the testing app context and yields the app object. After the testing session is
+    over, the app context is popped off the stack.
+    """
+
     test_config = os.environ.get('MY_FLASK_APP_CONFIG', 'sqlite_test')
     if 'test' not in test_config:
         pytest.exit(f'Must supply a testing configuration! Supplied config - {test_config}', 1)
@@ -67,6 +72,11 @@ def req(app):
 # Modified from http://alexmic.net/flask-sqlalchemy-pytest/
 @pytest.fixture(scope='session')
 def db(app):
+    """
+    Session scoped fixture that assigns the app to the database, creates the tables, yields the database object, and
+    drops all tables once the testing session is complete.
+    """
+
     _db.app = app
     _db.create_all()
 
@@ -78,6 +88,11 @@ def db(app):
 # Modified from http://alexmic.net/flask-sqlalchemy-pytest/
 @pytest.fixture(scope='function')
 def session(db):
+    """
+    Function scoped fixture that creates a database session with which tests can independently work in and have no
+    effect on other tests as any changes made during this session are rolled backed afterwards.
+    """
+
     connection = db.engine.connect()
     transaction = connection.begin()
 
@@ -94,11 +109,19 @@ def session(db):
 
 @pytest.fixture(scope='function')
 def users():
+    """
+    Fixture that returns a list of test users.
+    """
+
     return deepcopy(__USERS)
 
 
 @pytest.fixture(scope='function')
 def posts(users):
+    """
+    Fixture that returns a list of test posts assigned to the test users.
+    """
+
     _posts = {}
     with open(TEST_POSTS_FILE, 'r') as file:
         for i, doc in enumerate(json.load(file)):
@@ -110,26 +133,47 @@ def posts(users):
 
 @pytest.fixture(scope='function')
 def user_2posts(users):
+    """
+    Fixture that returns a test user with 2 posts.
+    """
+
     return users['user0']
 
 
 @pytest.fixture(scope='function')
 def user_1post(users):
+    """
+    Fixture that returns a test user with 1 post.
+    """
+
     return users['user1']
 
 
 @pytest.fixture(scope='function')
 def user_0post(users):
+    """
+    Fixture that returns a test user with 0 posts.
+    """
+
     return users['user2']
 
 
 @pytest.fixture(scope='function')
 def post(posts):
+    """
+    Fixture that returns a test post belonging to test_user0.
+    """
+
     return posts['post0']
 
 
 @pytest.fixture(scope='function')
 def loaded_db(session, users, posts, request):
+    """
+    Function scoped fixture that returns a session object that has already been preloaded with data. All changes made to
+    this session are rolled back after the test.
+    """
+
     for user in users.values():
         if request.__dict__.get('param'):
             user.password = bcrypt.generate_password_hash(user.password).decode('utf-8')

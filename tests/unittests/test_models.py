@@ -9,6 +9,10 @@ from datetime import datetime
     (None, 'test_user', 'test_user@demo.com', 'my_image.jpg', 'test_password')
 ], indirect=['session'], ids=['w_default_image', 'w_explicit_image'])
 def test_create_user(session, username, email, image_file, password):
+    """
+    Test the User model with valid data.
+    """
+
     if image_file is None:
         user = models.User(username=username, email=email, password=password)
     else:
@@ -28,6 +32,10 @@ def test_create_user(session, username, email, image_file, password):
     (None, 'test_user', 'test_user@demo.com', None)
 ], indirect=['session'], ids=['null_username', 'null_email', 'null_password'])
 def test_create_user_fail(session, username, email, password):
+    """
+    Test the User model with invalid data.
+    """
+
     user = models.User(username=username, email=email, password=password)
     session.add(user)
 
@@ -36,6 +44,10 @@ def test_create_user_fail(session, username, email, password):
 
 
 def test_create_duplicate_user(session):
+    """
+    Test the User model with duplicate ids.
+    """
+
     user1 = models.User(id=1, username='test_user1', email='test_email', password='test_password')
     user2 = models.User(id=1, username='test_user2', email='test_email', password='test_password')
     session.add(user1)
@@ -50,6 +62,10 @@ def test_create_duplicate_user(session):
     (None, None, 'test_post', datetime.utcnow(), 'test_content')
 ], indirect=['session', 'user_0post'], ids=['w_current_time', 'w_given_time'])
 def test_create_post(session, user_0post, title, date_posted, content):
+    """
+    Test the Post model with valid data.
+    """
+
     post = models.Post(title=title, content=content, date_posted=date_posted, author=user_0post)
 
     session.add(post)
@@ -66,6 +82,10 @@ def test_create_post(session, user_0post, title, date_posted, content):
     (None, None, 'test_post', datetime.utcnow(), None)
 ], indirect=['session', 'user_0post'], ids=['w_current_time', 'w_given_time'])
 def test_create_post_fail(session, user_0post, title, date_posted, content):
+    """
+    Test the Post model with invalid data.
+    """
+
     post = models.Post(title=title, content=content, date_posted=date_posted, author=user_0post)
     session.add(post)
 
@@ -74,6 +94,10 @@ def test_create_post_fail(session, user_0post, title, date_posted, content):
 
 
 def test_create_post_no_author(session):
+    """
+    Test the Post model when no author is supplied.
+    """
+
     post = models.Post(title='test_title', content='test_content')
     session.add(post)
 
@@ -82,6 +106,10 @@ def test_create_post_no_author(session):
 
 
 def test_create_post_duplicate(session):
+    """
+    Test the Post model when there are duplicate ids.
+    """
+
     post1 = models.Post(id=1, title='test_title1', content='test_content')
     post2 = models.Post(id=2, title='test_title1', content='test_content')
     session.add(post1)
@@ -92,5 +120,9 @@ def test_create_post_duplicate(session):
 
 
 def test_load_user(loaded_db, users):
+    """
+    Test that users loaded into the database are retrieved properly by their ids.
+    """
+
     for user in users.values():
         assert user == models.load_user(user.id)
