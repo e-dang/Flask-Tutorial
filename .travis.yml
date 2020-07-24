@@ -15,3 +15,7 @@ deploy:
     script: bash ./.travis/upload_dockerhub.sh
     on:
       all_branches: true
+  - provider: script
+    script: bash  ./.travis/deploy_heroku.sh
+    on:
+      all_branches: true
