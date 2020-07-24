@@ -12,7 +12,7 @@ else
 fi
 
 wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-echo "$HEROKU_PASS" | docker login --username=$HEROKU_USER --password-stdin registry.heroku.com
+echo "$HEROKU_API_KEY" | docker login --username=$HEROKU_USER --password-stdin registry.heroku.com
 docker tag $DOCKER_USER/$DOCKER_REPO:$TAG registry.heroku.com/$HEROKU_APP_NAME/web
 docker push registry.heroku.com/$HEROKU_APP_NAME/web
 heroku container:release web --app $HEROKU_APP_NAME
